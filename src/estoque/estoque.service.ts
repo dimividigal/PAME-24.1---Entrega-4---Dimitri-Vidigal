@@ -1,26 +1,36 @@
 import { Injectable } from '@nestjs/common';
 import { CreateEstoqueDto } from './dto/create-estoque.dto';
 import { UpdateEstoqueDto } from './dto/update-estoque.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class EstoqueService {
-  create(createEstoqueDto: CreateEstoqueDto) {
-    return 'This action adds a new estoque';
+
+  constructor (private readonly prisma:PrismaService){}
+
+  create(data: CreateEstoqueDto) {
+
+    const estoqueCriado = this.prisma.estoque.create({ data });
+    return estoqueCriado
   }
 
   findAll() {
-    return `This action returns all estoque`;
-  }
+    const estoques = this.prisma.estoque.findMany();
+    return estoques
+    }
 
   findOne(id: number) {
-    return `This action returns a #${id} estoque`;
+    const umestoque = this.prisma.estoque.findUnique ({where: {id}});
+    return umestoque
   }
 
   update(id: number, updateEstoqueDto: UpdateEstoqueDto) {
-    return `This action updates a #${id} estoque`;
+    const estoqueatualizado = this.prisma.estoque.update({where: {id}, data: updateEstoqueDto});
+    return estoqueatualizado
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} estoque`;
+  async remove(id: number) {
+    await this.prisma.estoque.delete({where:{id}});
+    return 'item do estoque deletado!'
   }
 }

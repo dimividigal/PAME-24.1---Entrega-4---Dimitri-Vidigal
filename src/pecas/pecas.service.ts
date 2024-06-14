@@ -1,26 +1,35 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePecaDto } from './dto/create-peca.dto';
 import { UpdatePecaDto } from './dto/update-peca.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class PecasService {
-  create(createPecaDto: CreatePecaDto) {
-    return 'This action adds a new peca';
+
+  constructor(private readonly prisma: PrismaService){}
+
+  create(data: CreatePecaDto) {
+    const pecaCriada = this.prisma.pecas.create({ data });
+    return pecaCriada
   }
 
   findAll() {
-    return `This action returns all pecas`;
+    const pecas = this.prisma.pecas.findMany();
+    return pecas
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} peca`;
+    const peca = this.prisma.pecas.findUnique ({where: {id}});
+    return peca
   }
 
   update(id: number, updatePecaDto: UpdatePecaDto) {
-    return `This action updates a #${id} peca`;
+    const pecaatualizada = this.prisma.pecas.update({where: {id}, data: updatePecaDto});
+    return pecaatualizada
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} peca`;
+  async remove(id: number) {
+    await this.prisma.pecas.delete({where:{id}});
+    return 'peca deletada!'
   }
 }

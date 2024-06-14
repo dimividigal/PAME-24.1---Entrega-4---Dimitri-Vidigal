@@ -1,1 +1,5 @@
-export class CreateMateriaiDto {}
+export class CreateMateriaiDto {
+
+    tipo_material: string
+
+}

@@ -10,6 +10,52 @@ datasource db {
 
 model Funcionario{
 
-  id Int @id 
+  id Int @id @default(autoincrement())
+  nome String
+  senha String
+  checklist Checklist[]
+  estoque Estoque[]
+
+}
+
+
+model Pecas{
+
+  id Int @id @default(autoincrement())
+  nome_peca String
+  preco String
+  quantidade String
+  estoque Estoque[]
+
+}
+
+model Material{
+
+  id Int @id @default(autoincrement())
+  tipo_material String
+  checklist Checklist[]
+  
+
+}
+
+model Checklist{
+
+  id Int @id @default(autoincrement())
+  id_funcionario Int
+  funcionario Funcionario @relation(fields: [id_funcionario],references: [id])
+  id_material Int
+  material Material @relation(fields: [id_material],references: [id])
+  status String
+
+}
+
+model Estoque{
+
+  id Int @id @default(autoincrement())
+  id_funcionario Int
+  funcionario Funcionario @relation(fields: [id_funcionario],references: [id])
+  id_peca Int
+  peca Pecas @relation(fields: [id_peca], references: [id])
+  data DateTime
 
 }
